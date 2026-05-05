@@ -1,0 +1,9 @@
+EXPP\ doc/
+EXPP\ versions/
+*.py
+backend/.env
+frontend/.env
+node_modules
+dist
+.vscode
+.DS_Store
