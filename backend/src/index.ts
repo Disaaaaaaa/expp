@@ -100,7 +100,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/export', async (req, res) => {
+app.post('/export', async (req, res) => {
   try {
     const { tasks, options, title = 'Task Sheet', format = 'docx' } = req.body as {
       tasks: Question[];
@@ -148,7 +148,7 @@ app.post('/api/export', async (req, res) => {
 });
 
 // OpenAI API proxy endpoint
-app.post('/api/openai/chat', async (req, res) => {
+app.post('/openai/chat', async (req, res) => {
   try {
     if (!openai || !process.env.OPENAI_API_KEY) {
       return res.status(500).json({ 
@@ -192,12 +192,9 @@ app.post('/api/openai/chat', async (req, res) => {
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-// Only listen if not running on Vercel
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Export server listening on http://localhost:${PORT}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`Export server listening on http://localhost:${PORT}`);
+});
 
 export default app;
 
