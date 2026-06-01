@@ -792,7 +792,22 @@ export const translations = {
       'Geometry': 'Геометрия',
       'Calculus': 'Математикалық талдау',
       'Statistics': 'Статистика',
-      'Trigonometry': 'Тригонометрия'
+      'Trigonometry': 'Тригонометрия',
+      'Programming Fundamentals': 'Бағдарламалау негіздері',
+      'Data Structures': 'Деректер құрылымдары',
+      'Algorithms': 'Алгоритмдер',
+      'Database Systems': 'Деректер қоры жүйелері',
+      'Web Development': 'Веб-әзірлеу',
+      'Computer Networks': 'Компьютерлік желілер',
+      'Operating Systems': 'Операциялық жүйелер',
+      'Software Engineering': 'Бағдарламалық жасақтама инженериясы',
+      'Cybersecurity': 'Киберқауіпсіздік',
+      'Artificial Intelligence': 'Жасанды интеллект',
+      'Machine Learning': 'Машиналық оқыту',
+      'Computer Architecture': 'Компьютер архитектурасы',
+      'Cloud Computing': 'Бұлтты есептеу',
+      'Mobile Development': 'Мобильді әзірлеу',
+      'Blockchain Technology': 'Блокчейн технологиясы'
     },
     common: {
       error: 'Қате',
