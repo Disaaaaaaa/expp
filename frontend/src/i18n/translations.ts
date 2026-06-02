@@ -12,7 +12,8 @@ export const translations = {
       login: 'Login',
       register: 'Register',
       logout: 'Logout',
-      platform: 'Task Preparation Platform'
+      platform: 'Task Preparation Platform',
+      back: 'Back'
     },
     home: {
       welcome: 'Welcome to Task Preparation Platform',
@@ -284,7 +285,8 @@ export const translations = {
       updateSuccess: 'Sheet updated successfully',
       sheetTitle: 'Sheet Title',
       addTasks: 'Add Tasks',
-      noTasksAdded: 'No tasks added yet. Click "Add Tasks" to get started.'
+      noTasksAdded: 'No tasks added yet. Click "Add Tasks" to get started.',
+      deleteSuccess: 'Sheet deleted successfully'
     },
     profile: {
       manageDesc: 'Manage your profile information and account settings.',
@@ -335,6 +337,7 @@ export const translations = {
       register: 'Регистрация',
       logout: 'Выйти',
       platform: 'Платформа Подготовки Заданий',
+      back: 'Назад',
       studyGroups: 'Учебные группы',
     },
     home: {
@@ -601,7 +604,8 @@ export const translations = {
       updateSuccess: 'Лист успешно обновлен',
       sheetTitle: 'Заголовок листа',
       addTasks: 'Добавить задания',
-      noTasksAdded: 'Задания еще не добавлены. Нажмите «Добавить задания», чтобы начать.'
+      noTasksAdded: 'Задания еще не добавлены. Нажмите «Добавить задания», чтобы начать.',
+      deleteSuccess: 'Лист успешно удален'
     },
     profile: {
       manageDesc: 'Управляйте данными своего профиля и настройками учетной записи.',
@@ -651,7 +655,8 @@ export const translations = {
       login: 'Кіру',
       register: 'Тіркелу',
       logout: 'Шығу',
-      platform: 'Тапсырма Дайындау Платформасы'
+      platform: 'Тапсырма Дайындау Платформасы',
+      back: 'Артқа'
     },
     home: {
       welcome: 'Тапсырма Дайындау Платформасына қош келдіңіз',
@@ -1035,7 +1040,8 @@ export const translations = {
       updateSuccess: 'Парақша сәтті жаңартылды',
       sheetTitle: 'Парақша тақырыбы',
       addTasks: 'Тапсырмалар қосу',
-      noTasksAdded: 'Тапсырмалар әлі қосылмаған. Бастау үшін «Тапсырмалар қосу» түймесін басыңыз.'
+      noTasksAdded: 'Тапсырмалар әлі қосылмаған. Бастау үшін «Тапсырмалар қосу» түймесін басыңыз.',
+      deleteSuccess: 'Парақша сәтті жойылды'
     },
     profile: {
       manageDesc: 'Профиль ақпаратын және тіркелгі параметрлерін басқарыңыз.',
