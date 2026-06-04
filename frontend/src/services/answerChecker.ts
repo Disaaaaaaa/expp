@@ -7,46 +7,56 @@ export const checkAnswerWithAI = async (
   question: string
 ): Promise<{ isCorrect: boolean; feedback: string }> => {
   const prompt = `
-Task: Evaluate student response accuracy for this ${type} question using Cambridge International Examination A/AS-level and AQA Computer Science assessment standards.
+Тапсырма: Оқушының ${type} түріндегі сұраққа берген жауабын бағала.
 
-Question: ${question}
-Solution: ${solution}
-Student Response: ${userAnswer}
+Сұрақ: ${question}
+Дұрыс жауап: ${solution}
+Оқушының жауабы: ${userAnswer}
 
-Evaluation Criteria:
-1. Mathematical equivalence (for numerical responses)
-2. Conceptual understanding demonstration
-3. Key learning objectives coverage
-4. Technical accuracy and precision
-5. Cambridge/AQA style assessment standards
+Бағалау өлшемдері:
+1. Мазмұндық дұрыстық (негізгі ұғымдар мен анықтамалардың дұрыстығы)
+2. Толықтық (барлық негізгі тармақтардың қамтылуы)
+3. Техникалық дәлдік (терминология мен есептеулердің дұрыстығы)
+4. Түсінік тереңдігі
 
-Respond in this JSON format:
+Тек қана мына JSON форматында жауап бер (басқа мәтін жоқ):
 {
   "isCorrect": boolean,
   "score": number (0-100),
-  "feedback": "Detailed pedagogical feedback explaining correctness/errors",
-  "keyPointsCovered": ["list", "of", "key", "points", "demonstrated"],
-  "missingConcepts": ["list", "of", "missing", "concepts"],
-  "improvementSuggestions": ["specific", "recommendations", "for", "enhancement"]
+  "feedback": "Жауаптың дұрыстығын немесе қателерін қазақ тілінде түсіндіретін егжей-тегжейлі педагогикалық кері байланыс",
+  "keyPointsCovered": ["қамтылған", "негізгі", "тармақтар"],
+  "missingConcepts": ["жетіспейтін", "ұғымдар"],
+  "improvementSuggestions": ["нақты", "жақсарту", "ұсыныстары"]
 }`;
 
   try {
     const completion = await throttledCompletion([
-      { role: "system", content: "You are an expert educational assessor specializing in Cambridge International Examination A/AS-level and AQA Computer Science evaluation standards." },
+      {
+        role: "system",
+        content: "Сен білім беру саласындағы тәжірибелі бағалаушысың. Оқушылардың жауаптарын бағалап, кері байланысты ТІКЕЛЕЙ ҚАЗАҚ ТІЛІНДЕ береді. Барлық пікірлер, түсіндірмелер және ұсыныстар қазақ тілінде жазылуы МІНДЕТТІ. Ешқашан ағылшын немесе орыс тілінде жауап берме."
+      },
       { role: "user", content: prompt }
     ]);
 
-    const response = JSON.parse(completion.choices[0]?.message?.content || '{}');
+    const raw = completion.choices[0]?.message?.content || '{}';
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    const response = JSON.parse(jsonMatch ? jsonMatch[0] : raw);
+
+    const score = response.score ?? 0;
+    const feedback = response.feedback || 'Жауап бағаланды.';
+    const covered = response.keyPointsCovered?.join(', ') || '—';
+    const missing = response.missingConcepts?.join(', ') || '—';
+    const suggestions = response.improvementSuggestions?.join(', ') || '—';
+
     return {
-      isCorrect: response.score >= 85, 
-      feedback: `Assessment Score: ${response.score}%\n\nDetailed Feedback:\n${response.feedback}\n\nKey Points Demonstrated: ${response.keyPointsCovered?.join(', ') || 'N/A'}\n\nAreas for Improvement: ${response.improvementSuggestions?.join(', ') || 'N/A'}`
+      isCorrect: score >= 70,
+      feedback: `Баға: ${score}%\n\nКері байланыс:\n${feedback}\n\nДұрыс қамтылған тармақтар: ${covered}\n\nЖетіспейтін ұғымдар: ${missing}\n\nЖақсарту ұсыныстары: ${suggestions}`
     };
   } catch (error) {
     console.error('AI answer checking failed:', error);
-    
     return {
       isCorrect: false,
-      feedback: "Assessment system temporarily unavailable. Please review your response using standard evaluation criteria."
+      feedback: 'Бағалау жүйесі уақытша қолжетімсіз. Жауабыңызды өлшемдер бойынша өзіңіз тексеріңіз.'
     };
   }
 }; 
