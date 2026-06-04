@@ -1,5 +1,8 @@
 import { supabase } from './supabase';
 
+// Backend endpoint — bypasses RLS (service role on server)
+const ANALYTICS_URL = '/api/analytics';
+
 export type StudentStat = {
   id: string;
   first_name: string;
@@ -45,6 +48,23 @@ export type AnalyticsData = {
 };
 
 export async function fetchAnalytics(): Promise<AnalyticsData> {
+  // Get current session token
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Not authenticated');
+
+  // Call backend which uses service role to bypass RLS
+  const resp = await fetch(ANALYTICS_URL, {
+    headers: { Authorization: `Bearer ${session.access_token}` }
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error || 'Analytics request failed');
+  }
+  return await resp.json();
+}
+
+// Legacy direct fetch (kept for reference, not used)
+export async function fetchAnalyticsDirect(): Promise<AnalyticsData> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
