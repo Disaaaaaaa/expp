@@ -14,7 +14,8 @@ export const translations = {
       logout: 'Logout',
       platform: 'Task Preparation Platform',
       back: 'Back',
-      classes: 'Classes'
+      classes: 'Classes',
+      analytics: 'Analytics'
     },
     home: {
       welcome: 'Welcome to Task Preparation Platform',
@@ -340,6 +341,7 @@ export const translations = {
       platform: 'Платформа Подготовки Заданий',
       back: 'Назад',
       classes: 'Учебные группы',
+      analytics: 'Аналитика',
       studyGroups: 'Учебные группы',
     },
     home: {
@@ -659,7 +661,8 @@ export const translations = {
       logout: 'Шығу',
       platform: 'Тапсырма Дайындау Платформасы',
       back: 'Артқа',
-      classes: 'Оқу топтары'
+      classes: 'Оқу топтары',
+      analytics: 'Аналитика'
     },
     home: {
       welcome: 'Тапсырма Дайындау Платформасына қош келдіңіз',

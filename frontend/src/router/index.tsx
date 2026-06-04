@@ -20,7 +20,8 @@ const SheetsLibrary = lazy(() => import('@/pages/SheetsLibrary').then(m => ({ de
 const SheetView = lazy(() => import('@/pages/SheetView').then(m => ({ default: m.SheetView })));
 const SheetEdit = lazy(() => import('@/pages/SheetEdit').then(m => ({ default: m.SheetEdit })));
 const Students = lazy(() => import('@/pages/Students').then(m => ({ default: m.Students })));
-const Classes = lazy(() => import('@/pages/Classes').then(m => ({ default: m.Classes })));
+const Classes   = lazy(() => import('@/pages/Classes').then(m => ({ default: m.Classes })));
+const Analytics = lazy(() => import('@/pages/Analytics').then(m => ({ default: m.Analytics })));
 
 export const AppRoutes = () => {
   return (
@@ -95,6 +96,12 @@ export const AppRoutes = () => {
         <Route path="/classes" element={
           <ProtectedRoute requiredRole="teacher">
             <Classes />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/analytics" element={
+          <ProtectedRoute requiredRole="teacher">
+            <Analytics />
           </ProtectedRoute>
         } />
         
