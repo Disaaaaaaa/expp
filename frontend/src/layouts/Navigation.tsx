@@ -116,6 +116,14 @@ export const Navigation = () => {
       isActive: location.pathname === '/students',
       requiresAuth: true,
       requiresTeacher: true
+    },
+    {
+      path: '/classes',
+      label: t('nav.classes'),
+      icon: <GraduationCap className="h-5 w-5" />,
+      isActive: location.pathname === '/classes',
+      requiresAuth: true,
+      requiresTeacher: true
     }
   ];
 

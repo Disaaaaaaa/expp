@@ -613,6 +613,102 @@ export async function getAllStudents() {
   }
 }
 
+// =====================
+// CLASSES (Оқу топтары)
+// =====================
+
+export async function getClasses() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+  const { data, error } = await supabase
+    .from('classes')
+    .select('*')
+    .eq('teacher_id', user.id)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+}
+
+export async function createClass(name: string, description = '') {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+  const { data, error } = await supabase
+    .from('classes')
+    .insert({ teacher_id: user.id, name, description })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateClass(classId: string, updates: { name?: string; description?: string }) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+  const { data, error } = await supabase
+    .from('classes')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', classId)
+    .eq('teacher_id', user.id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteClass(classId: string) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+  const { error } = await supabase
+    .from('classes')
+    .delete()
+    .eq('id', classId)
+    .eq('teacher_id', user.id);
+  if (error) throw error;
+}
+
+export async function getClassMembers(classId: string) {
+  const { data, error } = await supabase
+    .from('class_members')
+    .select('*, student:student_id(id, first_name, last_name, email, avatar_url)')
+    .eq('class_id', classId)
+    .order('joined_at', { ascending: true });
+  if (error) throw error;
+  return (data || []).map((m: any) => m.student).filter(Boolean);
+}
+
+export async function addStudentToClass(classId: string, studentId: string) {
+  const { error } = await supabase
+    .from('class_members')
+    .insert({ class_id: classId, student_id: studentId });
+  if (error && error.code !== '23505') throw error; // 23505 = duplicate
+}
+
+export async function removeStudentFromClass(classId: string, studentId: string) {
+  const { error } = await supabase
+    .from('class_members')
+    .delete()
+    .eq('class_id', classId)
+    .eq('student_id', studentId);
+  if (error) throw error;
+}
+
+export async function assignSheetToClass(sheetId: string, classId: string) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('User not authenticated');
+  const members = await getClassMembers(classId);
+  if (!members.length) throw new Error('Class has no students');
+  const assignments = members.map((s: any) => ({
+    teacher_id: user.id,
+    student_id: s.id,
+    sheet_id: sheetId,
+    class_id: classId,
+    status: 'pending'
+  }));
+  const { error } = await supabase.from('task_assignments').insert(assignments);
+  if (error) throw error;
+  return members.length;
+}
+
 export async function saveTaskSheet(sheet: Omit<TaskSheet, 'id' | 'created_at' | 'updated_at'>): Promise<string> {
   try {
     const { data: { user } } = await supabase.auth.getUser();

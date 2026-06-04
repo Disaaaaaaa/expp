@@ -13,7 +13,8 @@ export const translations = {
       register: 'Register',
       logout: 'Logout',
       platform: 'Task Preparation Platform',
-      back: 'Back'
+      back: 'Back',
+      classes: 'Classes'
     },
     home: {
       welcome: 'Welcome to Task Preparation Platform',
@@ -338,6 +339,7 @@ export const translations = {
       logout: 'Выйти',
       platform: 'Платформа Подготовки Заданий',
       back: 'Назад',
+      classes: 'Учебные группы',
       studyGroups: 'Учебные группы',
     },
     home: {
@@ -656,7 +658,8 @@ export const translations = {
       register: 'Тіркелу',
       logout: 'Шығу',
       platform: 'Тапсырма Дайындау Платформасы',
-      back: 'Артқа'
+      back: 'Артқа',
+      classes: 'Оқу топтары'
     },
     home: {
       welcome: 'Тапсырма Дайындау Платформасына қош келдіңіз',
