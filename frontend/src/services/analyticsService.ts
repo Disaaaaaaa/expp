@@ -55,17 +55,33 @@ export async function fetchAnalytics(): Promise<AnalyticsData> {
     .eq('teacher_id', user.id)
     .order('created_at');
 
-  // 2. All class members with profile info
+  // 2. All class members (raw)
   const classIds = (classes || []).map(c => c.id);
-  const { data: members } = classIds.length
+  const { data: rawMembers } = classIds.length
     ? await supabase
         .from('class_members')
-        .select('class_id, student_id, profiles!student_id(id, first_name, last_name, email, avatar_url)')
+        .select('class_id, student_id')
         .in('class_id', classIds)
     : { data: [] };
 
   // 3. All student IDs in teacher's classes
-  const studentIds = [...new Set((members || []).map((m: any) => m.student_id))];
+  const studentIds = [...new Set((rawMembers || []).map((m: any) => m.student_id))];
+
+  // Fetch profiles separately for reliability
+  const { data: profiles } = studentIds.length
+    ? await supabase
+        .from('profiles')
+        .select('id, first_name, last_name, email, avatar_url')
+        .in('id', studentIds)
+    : { data: [] };
+
+  const profileMap = new Map((profiles || []).map((p: any) => [p.id, p]));
+
+  // Enrich members with profile data
+  const members = (rawMembers || []).map((m: any) => ({
+    ...m,
+    profiles: profileMap.get(m.student_id) || null
+  }));
 
   // 4. Task submissions for these students
   const { data: submissions } = studentIds.length
